@@ -274,7 +274,7 @@ public class ScreenContainer<T extends ScreenFragment> extends ViewGroup {
       }
     }
     if (hasFragments) {
-      transaction.commitNowAllowingStateLoss();
+      transaction.commitAllowingStateLoss();
     }
   }
 
@@ -287,7 +287,7 @@ public class ScreenContainer<T extends ScreenFragment> extends ViewGroup {
     // attempt to reattach previously registered fragments that are not removed
     if (mFragmentManager != null && !mFragmentManager.isDestroyed()) {
       removeMyFragments();
-      mFragmentManager.executePendingTransactions();
+//       mFragmentManager.executePendingTransactions();
     }
 
     if (mParentScreenFragment != null) {
