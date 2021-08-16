@@ -1,33 +1,25 @@
 // connected PRs: #679, #675
-import {NavigationContainer} from '@react-navigation/native';
 import React from 'react';
-import {ScrollView, StyleSheet, View, Button, Text} from 'react-native';
-import {createNativeStackNavigator} from 'react-native-screens/native-stack';
+import {NavigationContainer, ParamListBase} from '@react-navigation/native';
+import {ScrollView, Button, Text} from 'react-native';
+//import {createNativeStackNavigator, NativeStackNavigationProp} from 'react-native-screens/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 
-const Stack = createNativeStackNavigator();
+const Stack = createStackNavigator();
 
 export default function NativeNavigation() {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        screenOptions={{
-          stackPresentation: 'modal',
-        }}>
-        <Stack.Screen
-          name="Home"
-          component={Home}
-          options={{
-            screenOrientation: 'portrait_up',
-          }}
-        />
+       >
         <Stack.Screen
           name="NestedNavigator"
           component={NestedNavigator}
-          options={{
-            screenOrientation: 'landscape',
-          }}
+        />
+        <Stack.Screen
+          name="Home"
+          component={Home}
         />
       </Stack.Navigator>
     </NavigationContainer>
@@ -37,33 +29,35 @@ export default function NativeNavigation() {
 // change to createStackNavigator to test with stack in the middle
 const Tab = createBottomTabNavigator();
 
-const NestedNavigator = (props) => (
-  <Tab.Navigator screensEnabled={true}>
+const NestedNavigator = () => (
+  <Tab.Navigator 
+    screenOptions={{
+      // screenOrientation: 'landscape_left',
+    }}
+  >
     <Tab.Screen name="Screen1" component={Home} />
     <Tab.Screen name="Screen2" component={Inner} />
-    <Tab.Screen name="Screen3" component={Home} />
+    <Tab.Screen name="Screen3" component={Home} 
+      // options={{screenOrientation: 'landscape_right'}}
+    />
   </Tab.Navigator>
 );
 
-const InnerStack = createNativeStackNavigator();
+const InnerStack = createStackNavigator();
 
-const Inner = (props) => (
-  <InnerStack.Navigator
-    screenOptions={{
-      screenOrientation: 'portrait_down',
-    }}>
+const Inner = () => (
+  <InnerStack.Navigator>
     <InnerStack.Screen name="DeeperHome" component={Home} />
   </InnerStack.Navigator>
 );
 
-function Home({navigation}) {
+function Home({navigation}: {navigation: any}) {
   const [yes, setYes] = React.useState(true);
   return (
     <ScrollView
       style={{backgroundColor: 'yellow'}}
       contentInsetAdjustmentBehavior="automatic"
       >
-      <View style={styles.leftTop} />
       <Button
         title="NestedNavigator"
         onPress={() => {
@@ -95,11 +89,3 @@ function Home({navigation}) {
     </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
